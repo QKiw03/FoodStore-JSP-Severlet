@@ -1,0 +1,142 @@
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- Dumping structure for table foodstore.client
+CREATE TABLE IF NOT EXISTS `client` (
+  `idclient` varchar(50) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `fullname` varchar(100) NOT NULL,
+  `sex` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `deliveryaddress` varchar(100) DEFAULT NULL,
+  `shoppingadress` varchar(100) DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `phonenumber` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `registeremail` tinyint(4) DEFAULT NULL,
+  `verificode` varchar(100) DEFAULT NULL,
+  `timeverificode` datetime DEFAULT NULL,
+  `statusverifi` tinyint(4) DEFAULT NULL,
+  `linkimage` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`idclient`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table foodstore.client: ~6 rows (approximately)
+INSERT INTO `client` (`idclient`, `username`, `password`, `fullname`, `sex`, `address`, `deliveryaddress`, `shoppingadress`, `dob`, `phonenumber`, `email`, `registeremail`, `verificode`, `timeverificode`, `statusverifi`, `linkimage`) VALUES
+	('1693293493420', 'vanquang1833', '0aZIjumA6gqaCkUvW8HPZqgsnMo=', 'Nguyễn Văn Quang', 'Nam', 'Hà Nội', 'Việt Nam', 'Hà Giang', '2023-08-10', '12345678', 'nvquang18@gmail.com', 1, NULL, NULL, NULL, NULL),
+	('1693294139176', 'vanquang1834', '+3a4D4yd2qeaAx02u1Nbo/wiY4I=', 'Nguyen Van Quang', 'Nam', 'Ha Noi', 'Viet Nam', 'Ha Noi', '2023-08-11', '3213123', 'nvquang18@gmail.com', 1, NULL, NULL, NULL, NULL),
+	('1693294176999', 'vanquang1835', '+3a4D4yd2qeaAx02u1Nbo/wiY4I=', 'Nguyen Van Quang', 'Nam', 'Ha Noi', 'Viet Nam', 'Ha Noi', '2023-08-11', '3213123', 'nvquang18@gmail.com', 1, NULL, NULL, NULL, NULL),
+	('1693391551323', 'vanquang183444', '+3a4D4yd2qeaAx02u1Nbo/wiY4I=', 'Nguyá»n VÄn Quang', 'Nam', 'HÃ  Ná»i', 'Viá»t Nam', 'HÃ  Giang', '2023-08-10', '3213123', 'vanquang18@gmail.com', 1, NULL, NULL, NULL, NULL),
+	('1693391624866', 'vanquang18401', '+3a4D4yd2qeaAx02u1Nbo/wiY4I=', 'Nguyen Van Quang', 'Nam', 'HÃ  Ná»i', 'Viá»t Nam', 'HÃ  Giang', '2023-08-11', '12345678', 'nvquang18@gmail.com', 1, NULL, NULL, NULL, NULL),
+	('1693391692422', 'vanquang184013', '+3a4D4yd2qeaAx02u1Nbo/wiY4I=', 'Nguyen Van Quang', 'Nam', 'HÃ  Ná»i', 'Viá»t Nam', 'HÃ  Giang', '2023-08-11', '12345678', 'nvquang18@gmail.com', 1, NULL, NULL, NULL, NULL);
+
+-- Dumping structure for table foodstore.order
+CREATE TABLE IF NOT EXISTS `order` (
+  `idorder` varchar(50) NOT NULL,
+  `idclient` varchar(50) NOT NULL,
+  `shoppingaddress` varchar(50) DEFAULT NULL,
+  `deliveryaddress` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `payments` varchar(50) DEFAULT NULL,
+  `paymentstatus` varchar(50) DEFAULT NULL,
+  `amountpaid` double DEFAULT NULL,
+  `amountmiss` double DEFAULT NULL,
+  `dateOrder` date DEFAULT NULL,
+  `dateDelivery` date DEFAULT NULL,
+  PRIMARY KEY (`idorder`),
+  KEY `FK_order_client` (`idclient`) USING BTREE,
+  CONSTRAINT `FK_order_client` FOREIGN KEY (`idclient`) REFERENCES `client` (`idclient`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table foodstore.order: ~0 rows (approximately)
+
+-- Dumping structure for table foodstore.orderdetails
+CREATE TABLE IF NOT EXISTS `orderdetails` (
+  `idorderdetails` varchar(50) NOT NULL,
+  `idorder` varchar(50) NOT NULL,
+  `idproduct` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `count` double DEFAULT 0,
+  `cost` double DEFAULT 0,
+  `discount` double DEFAULT 0,
+  `price` double DEFAULT 0,
+  `taxvat` double DEFAULT 0,
+  `totalmoney` double DEFAULT 0,
+  PRIMARY KEY (`idorderdetails`),
+  KEY `FK_orderdetails_order` (`idorder`) USING BTREE,
+  KEY `FK_orderdetails_product` (`idproduct`) USING BTREE,
+  CONSTRAINT `FK_orderdetails_order` FOREIGN KEY (`idorder`) REFERENCES `order` (`idorder`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_orderdetails_product` FOREIGN KEY (`idproduct`) REFERENCES `product` (`idproduct`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table foodstore.orderdetails: ~0 rows (approximately)
+
+-- Dumping structure for table foodstore.product
+CREATE TABLE IF NOT EXISTS `product` (
+  `idproduct` varchar(50) NOT NULL,
+  `nameproduct` varchar(512) DEFAULT NULL,
+  `idsupplier` varchar(255) DEFAULT NULL,
+  `date` int(11) DEFAULT NULL,
+  `importPrice` double DEFAULT NULL,
+  `cost` double DEFAULT NULL,
+  `price` double DEFAULT NULL,
+  `count` double DEFAULT NULL,
+  `idtypeoffood` varchar(50) DEFAULT NULL,
+  `story` text DEFAULT NULL,
+  PRIMARY KEY (`idproduct`),
+  KEY `FK_product_typeoffood` (`idtypeoffood`) USING BTREE,
+  KEY `FK_product_supplier` (`idsupplier`) USING BTREE,
+  CONSTRAINT `FK_product_supplier` FOREIGN KEY (`idsupplier`) REFERENCES `supplier` (`idsupplier`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_product_typeoffood` FOREIGN KEY (`idtypeoffood`) REFERENCES `typeoffood` (`idtypeoffood`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table foodstore.product: ~6 rows (approximately)
+INSERT INTO `product` (`idproduct`, `nameproduct`, `idsupplier`, `date`, `importPrice`, `cost`, `price`, `count`, `idtypeoffood`, `story`) VALUES
+	('SP1', 'BanhQue', 'SP1', 2000, 120000, 100000, 110000, 50, 'CT', NULL),
+	('SP2', 'CaPheSua', 'SP1', 1950, 150000, 30000, 160000, 20, 'KH', NULL),
+	('SP3', 'Donuts', 'SP4', 2003, 50000, 50000, 70000, 30, 'KT', NULL),
+	('SP4', 'KemOc', 'SP5', 2000, 140000, 130000, 170000, 70, 'PL', NULL),
+	('SP5', 'NuocDuaHau', 'SP2', 1980, 20000, 15000, 50000, 100, 'TT', NULL),
+	('SP6', 'TrungChien', 'SP3', 1980, 20000, 15000, 50000, 100, 'TT', NULL);
+
+-- Dumping structure for table foodstore.supplier
+CREATE TABLE IF NOT EXISTS `supplier` (
+  `idsupplier` varchar(255) NOT NULL,
+  `fullname` varchar(255) DEFAULT NULL,
+  `foundedyear` date DEFAULT NULL,
+  `story` text DEFAULT NULL,
+  PRIMARY KEY (`idsupplier`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table foodstore.supplier: ~5 rows (approximately)
+INSERT INTO `supplier` (`idsupplier`, `fullname`, `foundedyear`, `story`) VALUES
+	('SP1', 'Burger King', '1999-01-01', NULL),
+	('SP2', 'KFC', '1999-01-02', NULL),
+	('SP3', 'Lotteria', '1999-01-03', NULL),
+	('SP4', 'Jollibee', '1999-01-04', NULL),
+	('SP5', 'Popeyes', '1999-01-05', NULL);
+
+-- Dumping structure for table foodstore.typeoffood
+CREATE TABLE IF NOT EXISTS `typeoffood` (
+  `idtypeoffood` varchar(50) NOT NULL DEFAULT '',
+  `nametypeoffood` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`idtypeoffood`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table foodstore.typeoffood: ~3 rows (approximately)
+INSERT INTO `typeoffood` (`idtypeoffood`, `nametypeoffood`) VALUES
+	('TD', 'Drink'),
+	('TF', 'Food'),
+	('TO', 'Other');
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
